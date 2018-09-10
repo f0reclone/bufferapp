@@ -1,6 +1,6 @@
-<?
+<?php
 
-namespace BufferApp\BufferApp;
+namespace Scottybo\BufferApp;
 
 class BufferApp {
 	private $client_id;
