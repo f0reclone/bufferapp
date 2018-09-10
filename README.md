@@ -1,4 +1,4 @@
-bufferapp-php
+bufferapp
 =============
 Composer ready version of https://github.com/thewebguy/bufferapp-php
 
