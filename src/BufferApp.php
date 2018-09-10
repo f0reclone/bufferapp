@@ -37,7 +37,6 @@ class BufferApp {
 	public $errors = array(
 		'invalid-endpoint' => 'The endpoint you supplied does not appear to be valid.',
 
-		'400' => 'Expired token.',
 		'403' => 'Permission denied.',
 		'404' => 'Endpoint not found.',
 		'405' => 'Method not allowed.',
@@ -93,7 +92,7 @@ class BufferApp {
 		if ($callback_url) $this->set_callback_url($callback_url);
 		
                 // Will be set when initially authorising (30 second token)
-		if (isset($code)) {
+		if(isset($code) && !isset($token)) {
                     $this->code = $code;
                     
                     // Will set $this->access_token
@@ -103,7 +102,6 @@ class BufferApp {
                 // Will be set when performing API actions from stored access tokens
                 if(isset($token)) {
                     $this->access_token = $token;
-                    
                 }
                 
                 // There's an access token available
@@ -166,7 +164,7 @@ class BufferApp {
 		if ($post) {
 			$options += array(
 				CURLOPT_POST => $post,
-				CURLOPT_POSTFIELDS => $data
+				CURLOPT_POSTFIELDS => http_build_query($data)
 			);
 		} else {
 			$url .= '?' . http_build_query($data);
@@ -175,7 +173,7 @@ class BufferApp {
 		$ch = curl_init($url);
 		curl_setopt_array($ch, $options);
 		$rs = curl_exec($ch);
-		
+                
 		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                 
 		if ($code >= 400) {
@@ -213,4 +211,5 @@ class BufferApp {
 	}
 }
 ?>
+
 
