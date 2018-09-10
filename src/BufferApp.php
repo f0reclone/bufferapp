@@ -6,7 +6,7 @@ class BufferApp {
 	private $client_id;
 	private $client_secret;
 	private $code;
-	private $access_token;
+	public $access_token;
 	
 	private $callback_url;
 	private $authorize_url = 'https://bufferapp.com/oauth2/authorize';
@@ -37,6 +37,7 @@ class BufferApp {
 	public $errors = array(
 		'invalid-endpoint' => 'The endpoint you supplied does not appear to be valid.',
 
+		'400' => 'Expired token.',
 		'403' => 'Permission denied.',
 		'404' => 'Endpoint not found.',
 		'405' => 'Method not allowed.',
@@ -86,17 +87,30 @@ class BufferApp {
 		'400' => 'Media filesize out of acceptable range.',
 	);
 	
-	function __construct($client_id = '', $client_secret = '', $callback_url = '') {
+	function __construct($client_id = '', $client_secret = '', $callback_url = '',$code=null,$token=null) {
 		if ($client_id) $this->set_client_id($client_id);
 		if ($client_secret) $this->set_client_secret($client_secret);
 		if ($callback_url) $this->set_callback_url($callback_url);
 		
-		if ($_GET['code']) {
-			$this->code = $_GET['code'];
-			$this->create_access_token_url();
+                // Will be set when initially authorising (30 second token)
+		if (isset($code)) {
+                    $this->code = $code;
+                    
+                    // Will set $this->access_token
+                    $this->create_access_token_url();
 		}
+                
+                // Will be set when performing API actions from stored access tokens
+                if(isset($token)) {
+                    $this->access_token = $token;
+                    
+                }
+                
+                // There's an access token available
+                if(isset($this->access_token)) {
+                    $this->ok = true;
+                }
 		
-		$this->retrieve_access_token();
 	}
 	
 	function go($endpoint = '', $data = '') {
@@ -122,18 +136,6 @@ class BufferApp {
 		return $this->$method($this->buffer_url . $endpoint . '.json', $data);
 	}
 	
-	function store_access_token() {
-		$_SESSION['oauth']['buffer']['access_token'] = $this->access_token;
-	}
-	
-	function retrieve_access_token() {
-		$this->access_token = $_SESSION['oauth']['buffer']['access_token'];
-		
-		if ($this->access_token) {
-			$this->ok = true;
-		}
-	}
-	
 	function error($error) {
 		return (object) array('error' => $this->errors[$error]);
 	}
@@ -146,11 +148,13 @@ class BufferApp {
 			'client_secret' => $this->client_secret,
 			'redirect_uri' => $this->callback_url,
 		);
-		
+
 		$obj = $this->post($this->access_token_url, $data);
-		$this->access_token = $obj->access_token;
-		
-		$this->store_access_token();
+                
+                if(isset($obj->access_token)) {
+                    $this->access_token = $obj->access_token;		 
+                }
+
 	}
 	
 	function req($url = '', $data = '', $post = true) {
@@ -158,7 +162,7 @@ class BufferApp {
 		if (!$data || !is_array($data)) $data = array();
 					
 		$options = array(CURLOPT_RETURNTRANSFER => true, CURLOPT_HEADER => false);
-		
+
 		if ($post) {
 			$options += array(
 				CURLOPT_POST => $post,
@@ -173,6 +177,7 @@ class BufferApp {
 		$rs = curl_exec($ch);
 		
 		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                
 		if ($code >= 400) {
 			return $this->error($code);
 		}
@@ -208,3 +213,4 @@ class BufferApp {
 	}
 }
 ?>
+
