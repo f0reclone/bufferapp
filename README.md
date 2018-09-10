@@ -1,5 +1,6 @@
 bufferapp-php
 =============
+Composer ready version of https://github.com/thewebguy/bufferapp-php
 
 Simple PHP library for the amazing buffer at https://buffer.com
 
