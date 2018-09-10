@@ -1,6 +1,6 @@
 <?
 
-namespace BufferApp;
+namespace BufferApp\BufferApp;
 
 class BufferApp {
 	private $client_id;
