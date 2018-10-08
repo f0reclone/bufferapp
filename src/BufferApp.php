@@ -36,7 +36,8 @@ class BufferApp {
 	
 	public $errors = array(
 		'invalid-endpoint' => 'The endpoint you supplied does not appear to be valid.',
-
+		'400' => 'Buffer returned an unknown error message [a].',
+		'401' => 'Unauthorized.',
 		'403' => 'Permission denied.',
 		'404' => 'Endpoint not found.',
 		'405' => 'Method not allowed.',
@@ -62,6 +63,8 @@ class BufferApp {
 	);
 	
 	public $responses = array(
+		'400' => 'Buffer returned an unknown error message [b].',
+		'401' => 'Unauthorized.',
 		'403' => 'Permission denied.',
 		'404' => 'Endpoint not found.',
 		'405' => 'Method not allowed.',
