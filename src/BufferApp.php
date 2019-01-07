@@ -36,34 +36,45 @@ class BufferApp {
 	
 	public $errors = array(
 		'invalid-endpoint' => 'The endpoint you supplied does not appear to be valid.',
-		'400' => 'Buffer returned an unknown error message [a].',
 		'401' => 'Unauthorized.',
 		'403' => 'Permission denied.',
 		'404' => 'Endpoint not found.',
 		'405' => 'Method not allowed.',
+		'429' => 'Too Many Requests.',
 		'1000' => 'An unknown error occurred.',
 		'1001' => 'Access token required.',
 		'1002' => 'Not within application scope.',
 		'1003' => 'Parameter not recognized.',
-		'1004' => 'Required parameter missing.',
+		'1004' => 'Image missing.',
 		'1005' => 'Unsupported response format.',
+		'1006' => 'Parameter value not within bounds.',
+		'1007' => 'An existing matching record has been found.',
 		'1010' => 'Profile could not be found.',
 		'1011' => 'No authorization to access profile.',
 		'1012' => 'Profile did not save successfully.',
 		'1013' => 'Profile schedule limit reached.',
 		'1014' => 'Profile limit for user has been reached.',
+		'1015' => 'Profile could not be destroyed.',
+		'1016' => 'Profile buffer could not be emptied.',
 		'1020' => 'Update could not be found.',
 		'1021' => 'No authorization to access update.',
 		'1022' => 'Update did not save successfully.',
 		'1023' => 'Update limit for profile has been reached.',
 		'1024' => 'Update limit for team profile has been reached.',
+		'1025' => 'Update was recently posted, can\'t post duplicate content.',
+		'1026' => 'Update must be in error status to requeue.',
+		'1027' => 'Update must be in buffer and not custom scheduled in order to move to top.',
 		'1028' => 'Update soft limit for profile reached.',
+		'1029' => 'Event type not supported.',
 		'1030' => 'Media filetype not supported.',
 		'1031' => 'Media filesize out of acceptable range.',
+		'1034' => 'Cannot schedule updates in the past.',
+		'1042' => 'User did not save successfully.',
+		'1050' => 'Client could not be found.',
+		'1051' => 'No authorization to access client.',
 	);
 	
 	public $responses = array(
-		'400' => 'Buffer returned an unknown error message [b].',
 		'401' => 'Unauthorized.',
 		'403' => 'Permission denied.',
 		'404' => 'Endpoint not found.',
@@ -138,7 +149,7 @@ class BufferApp {
 	}
 	
 	function error($error) {
-		return (object) array('error' => $this->errors[$error]);
+		return $this->errors[$error];
 	}
 	
 	function create_access_token_url() {
@@ -176,14 +187,14 @@ class BufferApp {
 		$ch = curl_init($url);
 		curl_setopt_array($ch, $options);
 		$rs = curl_exec($ch);
-                
-		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                
-		if ($code >= 400) {
-			return $this->error($code);
+
+                $rs_array = json_decode($rs);
+
+		if ($rs_array->code >= 400) {
+                    $rs_array->message = $this->error($rs_array->code);
 		}
 		
-		return json_decode($rs);
+		return $rs_array;
 	}
 	
 	function get($url = '', $data = '') {
@@ -214,5 +225,6 @@ class BufferApp {
 	}
 }
 ?>
+
 
 
