@@ -172,7 +172,7 @@ class BufferApp {
 	function req($url = '', $data = '', $post = true) {
 		if (!$url) return false;
 		if (!$data || !is_array($data)) $data = array();
-					
+		
 		$options = array(CURLOPT_RETURNTRANSFER => true, CURLOPT_HEADER => false);
 
 		if ($post) {
@@ -183,18 +183,22 @@ class BufferApp {
 		} else {
 			$url .= '?' . http_build_query($data);
 		}
-		
+
 		$ch = curl_init($url);
 		curl_setopt_array($ch, $options);
-		$rs = curl_exec($ch);
+		$result = curl_exec($ch);
 
-                $rs_array = json_decode($rs);
-
-		if ($rs_array->code >= 400) {
-                    $rs_array->message = $this->error($rs_array->code);
+		$result_object = json_decode($result);
+				
+		if (!empty($result_object->code) && $result_object->code >= 400) {
+				    $result_object->message = $result_object->error($result_object->code);
+		}
+				
+		if(!empty($result_object->error)) {
+			$result_object->message = $result_object->error;
 		}
 		
-		return $rs_array;
+		return $result_object;
 	}
 	
 	function get($url = '', $data = '') {
