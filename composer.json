@@ -1,28 +1,31 @@
 {
-    "name": "f0reclone/bufferapp",
-    "type": "library",
-    "description": "Composer ready version of Simple PHP class for Buffer's API ",
-    "keywords": ["buffer"],
-    "homepage": "https://github.com/scottybo/bufferapp",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Kevin Khandjian",
-            "email": "kevinkhandjian@gmail.com",
-            "homepage": "http://kevin.fm/",
-            "role": "Developer"
-        },
-		{
-			"name": "Scott Bowler",
-			"email": "scott.bowler@dcsworldwide.net"
-	    },{
-			"name": "Andreas Neufeld",
-			"email": "aneufeld@drivebeyond.eu"
-	    }
-    ],
-    "autoload": {
-        "psr-4": {
-            "Scottybo\\BufferApp\\": "src/"
-        }
-    }
+   "name":"f0reclone/bufferapp",
+   "type":"library",
+   "description":"Composer ready version of Simple PHP class for Buffer's API ",
+   "keywords":[
+      "buffer"
+   ],
+   "homepage":"https://github.com/f0reclone/bufferapp",
+   "license":"MIT",
+   "authors":[
+      {
+         "name":"Kevin Khandjian",
+         "email":"kevinkhandjian@gmail.com",
+         "homepage":"http://kevin.fm/",
+         "role":"Developer"
+      },
+      {
+         "name":"Scott Bowler",
+         "email":"scott.bowler@dcsworldwide.net"
+      },
+      {
+         "name":"Andreas Neufeld",
+         "email":"aneufeld@drivebeyond.eu"
+      }
+   ],
+   "autoload":{
+      "psr-4":{
+         "Scottybo\\BufferApp\\":"src/"
+      }
+   }
 }
