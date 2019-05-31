@@ -1,5 +1,5 @@
 {
-    "name": "scottybo/bufferapp",
+    "name": "f0reclone/bufferapp",
     "type": "library",
     "description": "Composer ready version of Simple PHP class for Buffer's API ",
     "keywords": ["buffer"],
@@ -15,6 +15,9 @@
 		{
 			"name": "Scott Bowler",
 			"email": "scott.bowler@dcsworldwide.net"
+	    },{
+			"name": "Andreas Neufeld",
+			"email": "aneufeld@drivebeyond.eu"
 	    }
     ],
     "autoload": {
