@@ -191,7 +191,7 @@ class BufferApp {
 		$result_object = json_decode($result);
 				
 		if (!empty($result_object->code) && $result_object->code >= 400) {
-				    $result_object->message = $result_object->error($result_object->code);
+				    $result_object->message = $this->error($result_object->code);
 		}
 				
 		if(!empty($result_object->error)) {
